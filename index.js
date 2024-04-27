@@ -29,8 +29,58 @@ async function run() {
     // await client.connect();
 
     const artCollection=client.db('artDB').collection('arts')
+    const categoryCollection=client.db('artDB').collection('subCategories')
+
+
+    const count = await categoryCollection.countDocuments();
+    if (count === 0) {
+      const subCategories=[
+        {
+          "image": "https://i.ibb.co/GFXSvrh/images-q-tbn-ANd9-Gc-TI-JLGx-IH-y-TPGL71-N6tb-BVz-Zx-Gh5-E580-V8a9-Gd-JXw-s.jpg",
+          "Subcategory_Name": "Landscape Painting",
+          "info": "Paintings specific to Landscape Painting"
+        },
+        {
+          "image": "https://i.ibb.co/BNnbfYV/images-q-tbn-ANd9-Gc-RM6y-Lzh-IEbrmp9g-NW3-Ertec-Aemm7-W4nm-Wik-ERhqb-Rhb-A-s.jpg",
+          "Subcategory_Name": "Portrait Drawing",
+          "info": "Information specific to Portrait Drawing"
+        },
+        {
+          "image": "https://i.ibb.co/Sf2hRph/images-q-tbn-ANd9-Gc-TXW3-Ah-MBBT5jj-PA4i5k2-Wvgqn1-BS6-Ft-SUOA51-EDw5-VKA-s.jpg",
+          "Subcategory_Name": "Watercolour Painting",
+          "info": "Paintings specific to Watercolour Painting"
+        },
+        {
+          "image": "https://i.ibb.co/Q9fCCSD/images-q-tbn-ANd9-Gc-SKg-Jfj5lyvh-L-Gqeuhp-UNQ54-Dd-TOn-Z7-Amc-Od7-XP-Srw-s.jpg",
+          "Subcategory_Name": "Oil Painting",
+          "info": "Paintings specific to Oil Painting"
+        },
+        {
+          "image": "https://i.ibb.co/wrX22Yk/maxresdefault.jpg",
+          "Subcategory_Name": "Charcoal Sketching",
+          "info": "Sketching specific to Charcoal Sketching"
+        },
+        {
+          "image": "https://i.ibb.co/42z1JFz/images-q-tbn-ANd9-Gc-RSWn1yd-X4i0-U6-BLu-Fi2-sy-K6-J2-B5-MWAWo2-Ud7hy-Az4-YQ-s.jpg",
+          "Subcategory_Name": "Cartoon Drawing",
+          "info": "Drawing specific to Cartoon Drawing"
+        }
+      ]
+      const result = await categoryCollection.insertMany(subCategories);
+      console.log(`${result.insertedCount} documents inserted into categoryCollection`);
+    } else {
+      console.log("subCategories collection is not empty. Skipping insertion.");
+    }
+
+   
+    
     app.get('/arts', async(req, res) => {
       const cursor= artCollection.find()
+      const result=await cursor.toArray()
+      res.send(result)
+    })
+    app.get('/subCategories', async(req, res) => {
+      const cursor= categoryCollection.find()
       const result=await cursor.toArray()
       res.send(result)
     })
