@@ -71,6 +71,35 @@ async function run() {
       const result=await artCollection.insertOne(newArts)
       res.send(result)
     })
+
+    app.put('/arts/:id', async(req, res) => {
+      const id=req.params.id
+      const filter={_id: new ObjectId(id)}
+      const options={upsert:true}
+      const updated=req.body
+      const art={
+          $set:{
+            image:updated.image,
+            item_name:updated.item_name,
+            Subcategory_Name:updated.Subcategory_Name,
+            short_description:updated.short_description,
+            price:updated.price,
+            rating:updated.rating,
+            customization:updated.customization,
+            processing_time:updated.processing_time,
+            stockStatus:updated.stockStatus
+            
+          }
+      }
+      const result=await artCollection.updateOne(filter,art,options)
+      res.send(result)
+    })
+    app.delete('/arts/:id', async(req, res) => {
+      const id=req.params.id
+      const query={_id: new ObjectId(id)}
+      const result=await artCollection.deleteOne(query)
+      res.send(result)
+    })
     // Send a ping to confirm a successful connection
     // await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
