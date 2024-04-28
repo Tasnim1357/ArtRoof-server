@@ -51,11 +51,11 @@ async function run() {
       const result=await artCollection.findOne(query)
       res.send(result)
     })
-    // app.get('/myarts/:email', async(req, res) => {
-    //   console.log(req.params.email)
-    //   const result=await artCollection.find({email: req.params.email}).toArray();
-    //   res.send(result)
-    // })
+    app.get('/category/:Subcategory_Name', async(req, res) => {
+      console.log(req.params.Subcategory_Name)
+      const result=await artCollection.find({Subcategory_Name: req.params.Subcategory_Name}).toArray();
+      res.send(result)
+    })
 
     app.get('/myarts/:email', async (req, res) => {
       try {
@@ -73,6 +73,10 @@ async function run() {
         res.status(500).send("Internal server error");
       }
     });
+
+ 
+    
+
     
     app.post('/arts', async(req, res) => {
       const newArts=req.body
